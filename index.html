@@ -264,7 +264,8 @@
 
     .review-stars {
       color: #ffb703;
-      font-size: 13px;
+      font-size: 14px;
+      letter-spacing: 1px;
     }
 
     .review-text {
@@ -298,6 +299,27 @@
     .input-field:focus, .textarea-field:focus {
       border-color: var(--primary-pink);
       box-shadow: 0 0 0 3px rgba(242, 139, 159, 0.15);
+    }
+
+    /* Star Rating Selector */
+    .star-select-box {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .star-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #e0d0d5;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    .star-btn.selected {
+      color: #ffb703;
     }
 
     .submit-btn {
@@ -356,6 +378,15 @@
       <div id="reviewsList"></div>
 
       <div style="margin-top: 20px; border-top: 1.5px dashed var(--border-color); padding-top: 16px;">
+        <!-- เลือกระดับดาว 1 - 5 -->
+        <div class="star-select-box">
+          <button type="button" class="star-btn selected" onclick="setRating(1)">★</button>
+          <button type="button" class="star-btn selected" onclick="setRating(2)">★</button>
+          <button type="button" class="star-btn selected" onclick="setRating(3)">★</button>
+          <button type="button" class="star-btn selected" onclick="setRating(4)">★</button>
+          <button type="button" class="star-btn selected" onclick="setRating(5)">★</button>
+        </div>
+
         <div class="form-group">
           <input type="text" class="input-field" id="reviewerName" placeholder="Name">
         </div>
@@ -397,6 +428,20 @@
   </div>
 
   <script>
+    let currentRating = 5;
+
+    function setRating(rating) {
+      currentRating = rating;
+      const stars = document.querySelectorAll('.star-btn');
+      stars.forEach((star, index) => {
+        if (index < rating) {
+          star.classList.add('selected');
+        } else {
+          star.classList.remove('selected');
+        }
+      });
+    }
+
     function switchTab(tabName) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.content-card').forEach(card => card.classList.remove('active'));
@@ -467,7 +512,7 @@
       const reviews = getReviews();
       reviews.unshift({
         name: name,
-        stars: 5,
+        stars: currentRating,
         comment: comment,
         time: 'Just now'
       });
@@ -475,6 +520,7 @@
       localStorage.setItem('benefitie_reviews', JSON.stringify(reviews));
       document.getElementById('reviewerName').value = '';
       document.getElementById('reviewComment').value = '';
+      setRating(5);
       renderReviews();
     }
 
