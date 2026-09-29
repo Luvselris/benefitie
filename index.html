@@ -7,6 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
   <style>
     :root {
       --bg-color: #fff5f7;
@@ -301,7 +306,6 @@
       box-shadow: 0 0 0 3px rgba(242, 139, 159, 0.15);
     }
 
-    /* Star Rating Selector */
     .star-select-box {
       display: flex;
       justify-content: center;
@@ -378,7 +382,6 @@
       <div id="reviewsList"></div>
 
       <div style="margin-top: 20px; border-top: 1.5px dashed var(--border-color); padding-top: 16px;">
-        <!-- เลือกระดับดาว 1 - 5 -->
         <div class="star-select-box">
           <button type="button" class="star-btn selected" onclick="setRating(1)">★</button>
           <button type="button" class="star-btn selected" onclick="setRating(2)">★</button>
@@ -393,7 +396,7 @@
         <div class="form-group">
           <textarea class="textarea-field" id="reviewComment" rows="3" placeholder="review tong ni ka"></textarea>
         </div>
-        <button class="submit-btn" onclick="submitReview()">Submit</button>
+        <button class="submit-btn" id="submitReviewBtn" onclick="submitReview()">Submit</button>
       </div>
     </div>
 
@@ -428,6 +431,20 @@
   </div>
 
   <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCpAGDSy1NRgmLV_g7qJrCpwOhU9MrfQyY",
+      authDomain: "benefitie.firebaseapp.com",
+      projectId: "benefitie",
+      storageBucket: "benefitie.firebasestorage.app",
+      messagingSenderId: "270365672215",
+      appId: "1:270365672215:web:230d1491091e26ce83ed52",
+      measurementId: "G-7JYKQP96ZE"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
     let currentRating = 5;
 
     function setRating(rating) {
@@ -477,55 +494,68 @@
     }
     setInterval(createFloatingIcon, 1300);
 
-    function getReviews() {
-      const saved = localStorage.getItem('benefitie_reviews');
-      return saved ? JSON.parse(saved) : [];
+    // ดึงรีวิวแบบเรียลไทม์ ซิงก์ตรงกันทุกเครื่อง
+    function listenToReviews() {
+      db.collection("benefitie_reviews")
+        .orderBy("createdAt", "desc")
+        .onSnapshot(snapshot => {
+          const list = document.getElementById('reviewsList');
+          if (snapshot.empty) {
+            list.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 13px;">No reviews yet</p>';
+            return;
+          }
+          let html = '';
+          snapshot.forEach(doc => {
+            const r = doc.data();
+            html += `
+              <div class="review-box">
+                <div class="review-user">
+                  <span>${r.name}</span>
+                  <span class="review-stars">${'★'.repeat(r.stars || 5)}</span>
+                </div>
+                <div class="review-text">${r.comment}</div>
+                <div class="review-time">${r.time || ''}</div>
+              </div>
+            `;
+          });
+          list.innerHTML = html;
+        }, error => {
+          console.error("Firebase read error: ", error);
+        });
     }
 
-    function renderReviews() {
-      const list = document.getElementById('reviewsList');
-      const reviews = getReviews();
-      if (reviews.length === 0) {
-        list.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 13px;">No reviews yet</p>';
-        return;
-      }
-      list.innerHTML = reviews.map(r => `
-        <div class="review-box">
-          <div class="review-user">
-            <span>${r.name}</span>
-            <span class="review-stars">${'★'.repeat(r.stars || 5)}</span>
-          </div>
-          <div class="review-text">${r.comment}</div>
-          <div class="review-time">${r.time || ''}</div>
-        </div>
-      `).join('');
-    }
-
-    function submitReview() {
+    async function submitReview() {
       const name = document.getElementById('reviewerName').value.trim();
       const comment = document.getElementById('reviewComment').value.trim();
+      const btn = document.getElementById('submitReviewBtn');
 
-      if (!name || !comment) {
-        return;
+      if (!name || !comment) return;
+
+      btn.disabled = true;
+      btn.style.opacity = '0.6';
+
+      try {
+        await db.collection("benefitie_reviews").add({
+          name: name,
+          stars: currentRating,
+          comment: comment,
+          time: 'รีวิวเมื่อเร็วๆ นี้',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        document.getElementById('reviewerName').value = '';
+        document.getElementById('reviewComment').value = '';
+        setRating(5);
+      } catch (e) {
+        console.error("Firebase write error: ", e);
+      } finally {
+        btn.disabled = false;
+        btn.style.opacity = '1';
       }
-
-      const reviews = getReviews();
-      reviews.unshift({
-        name: name,
-        stars: currentRating,
-        comment: comment,
-        time: 'Just now'
-      });
-
-      localStorage.setItem('benefitie_reviews', JSON.stringify(reviews));
-      document.getElementById('reviewerName').value = '';
-      document.getElementById('reviewComment').value = '';
-      setRating(5);
-      renderReviews();
     }
 
     window.onload = function() {
-      renderReviews();
+      listenToReviews();
     };
   </script>
 </body>
