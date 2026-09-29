@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>benefitie ♡</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #fff5f7;
+      --card-bg: rgba(255, 255, 255, 0.96);
+      --primary-pink: #f28b9f;
+      --border-color: #fbd6df;
+      --text-main: #4a3e3d;
+      --text-muted: #8e7c7e;
+      --shadow: 0 10px 30px rgba(242, 139, 159, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', 'Mitr', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .floating-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .float-item {
+      position: absolute;
+      bottom: -50px;
+      font-size: 24px;
+      animation: floatUp 10s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      15% { opacity: 0.85; }
+      85% { opacity: 0.85; }
+      100% { transform: translateY(-115vh) rotate(360deg); opacity: 0; }
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 16px 80px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .header-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      padding: 16px 16px 24px;
+      box-shadow: var(--shadow);
+      border: 1.5px solid var(--border-color);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .banner-img {
+      width: 100%;
+      height: 150px;
+      border-radius: 20px;
+      object-fit: cover;
+      margin-bottom: -46px;
+      border: 2px solid #fff;
+    }
+
+    .profile-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #fff;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      position: relative;
+      z-index: 2;
+      background: #fff;
+    }
+
+    .store-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary-pink);
+      margin-top: 10px;
+    }
+
+    .store-bio {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .music-btn {
+      margin-top: 14px;
+      background: #fff;
+      border: 1.5px solid var(--primary-pink);
+      color: var(--primary-pink);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-block;
+      transition: all 0.2s;
+    }
+
+    .music-btn:hover {
+      background: var(--primary-pink);
+      color: #fff;
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #f29bb0, var(--primary-pink));
+      color: #fff;
+      border-color: var(--primary-pink);
+      box-shadow: 0 4px 10px rgba(242, 139, 159, 0.3);
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      border: 1.5px solid var(--border-color);
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .content-card.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--primary-pink);
+      margin-bottom: 14px;
+    }
+
+    .contact-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 16px;
+      text-align: center;
+      white-space: pre-line;
+    }
+
+    .link-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .link-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: #fff;
+      border-radius: 18px;
+      border: 1.5px solid var(--border-color);
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .link-item:hover {
+      transform: translateY(-2px);
+      background: #fff7fa;
+      border-color: var(--primary-pink);
+    }
+
+    .detail-desc {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #6e5d65;
+      background: #fff;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+
+    .thankyou-box {
+      text-align: center;
+      background: #fff0f3;
+      border: 1.5px dashed var(--primary-pink);
+      border-radius: 18px;
+      padding: 16px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary-pink);
+    }
+
+    .review-box {
+      background: #fff;
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .review-user {
+      font-weight: 700;
+      font-size: 13.5px;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .review-stars {
+      color: #ffb703;
+      font-size: 13px;
+    }
+
+    .review-text {
+      font-size: 13px;
+      margin-top: 6px;
+      line-height: 1.5;
+      color: #6e5d65;
+    }
+
+    .review-time {
+      font-size: 11px;
+      color: #b5a9ab;
+      margin-top: 4px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .input-field, .textarea-field {
+      width: 100%;
+      padding: 10px 16px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 16px;
+      font-size: 13.5px;
+      background: #fff;
+      color: var(--text-main);
+      outline: none;
+    }
+
+    .input-field:focus, .textarea-field:focus {
+      border-color: var(--primary-pink);
+      box-shadow: 0 0 0 3px rgba(242, 139, 159, 0.15);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #f29bb0, var(--primary-pink));
+      color: #fff;
+      border: none;
+      padding: 11px;
+      border-radius: 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(242, 139, 159, 0.3);
+      transition: opacity 0.2s;
+    }
+
+    .submit-btn:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="floating-container" id="emojiContainer"></div>
+
+  <audio id="bgMusic" loop src="https://files.catbox.moe/zy1wnq.mp3"></audio>
+
+  <div class="container">
+    <div class="header-card">
+      <img src="https://i.ibb.co/xKf0yf6p/IMG-3228.jpg" alt="Banner" class="banner-img">
+      <img src="https://i.ibb.co/nMS9Pz11/line-oa-chat-260929-233909.jpg" alt="Profile" class="profile-img">
+      <h1 class="store-name">benefitie ♡</h1>
+      <p class="store-bio">benefitie store แอพพรีเมี่ยม สติกเกอร์ไลน์ เติมเกม 
+♡ ติดต่อกดที่เมนู contact</p>
+      <button class="music-btn" id="musicToggle">Play Music</button>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('home')">Home</button>
+      <button class="tab-btn" onclick="switchTab('review')">Review</button>
+      <button class="tab-btn" onclick="switchTab('contact')">Contact</button>
+      <button class="tab-btn" onclick="switchTab('details')">Details</button>
+    </div>
+
+    <div class="content-card active" id="tab-home">
+      <h2 class="section-title">benefitie ♡</h2>
+      <p style="font-size: 14px; line-height: 1.8; color: #6e5d65;">
+        benefitie store แอพพรีเมี่ยม สติกเกอร์ไลน์ เติมเกม 
+♡ ติดต่อกดที่เมนู contact
+      </p>
+    </div>
+
+    <div class="content-card" id="tab-review">
+      <h2 class="section-title">review benefitie ♡</h2>
+      
+      <div id="reviewsList"></div>
+
+      <div style="margin-top: 20px; border-top: 1.5px dashed var(--border-color); padding-top: 16px;">
+        <div class="form-group">
+          <input type="text" class="input-field" id="reviewerName" placeholder="Name">
+        </div>
+        <div class="form-group">
+          <textarea class="textarea-field" id="reviewComment" rows="3" placeholder="review tong ni ka"></textarea>
+        </div>
+        <button class="submit-btn" onclick="submitReview()">Submit</button>
+      </div>
+    </div>
+
+    <div class="content-card" id="tab-contact">
+      <h2 class="section-title">Contact</h2>
+      <p class="contact-desc">ติดต่อเบเน่ ! 
+สนใจ สอบถามช่องทางด้านล่างได้เลยนะคะ ตอบช้าทักซ้ำได้เลยค่ะ ♡</p>
+      
+      <div class="link-list">
+        <a href="https://lin.ee/QCojvSB" target="_blank" class="link-item">
+          <span>line official account</span>
+          <span>➜</span>
+        </a>
+        <a href="https://www.instagram.com/benefitie?stkn=MWRxajZsc2ZiMDR1aA%3D%3D&utm_source=qr" target="_blank" class="link-item">
+          <span>instagram</span>
+          <span>➜</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="content-card" id="tab-details">
+      <h2 class="section-title">Details</h2>
+      <div class="detail-desc">
+        ไม่ตอบสามารถทักซ้ำได้เลยค่ะ ♡ ตอบภายใน 5 นาที ขายแอพพรีเมี่ยมดูแลตลอดการใช้งานค่ะ รับ wallet & bank ไม่มีค่าธรรมเนียมค่ะ open 10:00 - 23:00
+      </div>
+
+      <div class="thankyou-box">
+        thank you for support na
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.content-card').forEach(card => card.classList.remove('active'));
+
+      event.target.classList.add('active');
+      document.getElementById('tab-' + tabName).classList.add('active');
+    }
+
+    const music = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicToggle');
+    musicBtn.addEventListener('click', () => {
+      if (music.paused) {
+        music.play();
+        musicBtn.textContent = 'Pause Music';
+      } else {
+        music.pause();
+        musicBtn.textContent = 'Play Music';
+      }
+    });
+
+    const icons = ['👼🏻', '🪷', '🪽', '🐰', '👀'];
+    const container = document.getElementById('emojiContainer');
+
+    function createFloatingIcon() {
+      const el = document.createElement('div');
+      el.className = 'float-item';
+      el.textContent = icons[Math.floor(Math.random() * icons.length)];
+      el.style.left = Math.random() * 92 + 'vw';
+      el.style.animationDuration = (8 + Math.random() * 5) + 's';
+      container.appendChild(el);
+
+      setTimeout(() => { el.remove(); }, 13000);
+    }
+    setInterval(createFloatingIcon, 1300);
+
+    function getReviews() {
+      const saved = localStorage.getItem('benefitie_reviews');
+      return saved ? JSON.parse(saved) : [];
+    }
+
+    function renderReviews() {
+      const list = document.getElementById('reviewsList');
+      const reviews = getReviews();
+      if (reviews.length === 0) {
+        list.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 13px;">No reviews yet</p>';
+        return;
+      }
+      list.innerHTML = reviews.map(r => `
+        <div class="review-box">
+          <div class="review-user">
+            <span>${r.name}</span>
+            <span class="review-stars">${'★'.repeat(r.stars || 5)}</span>
+          </div>
+          <div class="review-text">${r.comment}</div>
+          <div class="review-time">${r.time || ''}</div>
+        </div>
+      `).join('');
+    }
+
+    function submitReview() {
+      const name = document.getElementById('reviewerName').value.trim();
+      const comment = document.getElementById('reviewComment').value.trim();
+
+      if (!name || !comment) {
+        return;
+      }
+
+      const reviews = getReviews();
+      reviews.unshift({
+        name: name,
+        stars: 5,
+        comment: comment,
+        time: 'Just now'
+      });
+
+      localStorage.setItem('benefitie_reviews', JSON.stringify(reviews));
+      document.getElementById('reviewerName').value = '';
+      document.getElementById('reviewComment').value = '';
+      renderReviews();
+    }
+
+    window.onload = function() {
+      renderReviews();
+    };
+  </script>
+</body>
+</html>
