@@ -366,7 +366,7 @@
         <form onsubmit="handleLogin(event)">
           <div class="form-group">
             <label>Email</label>
-            <input type="email" id="loginEmail" class="input-pill" placeholder="ancharee09605@gmail.com" required>
+            <input type="email" id="loginEmail" class="input-pill" placeholder="aebenenarak@gmail.com" required>
           </div>
           
           <div class="form-group">
@@ -488,8 +488,9 @@
   </div>
 
   <script>
-    const AUTH_EMAIL = "ancharee09605@gmail.com";
-    const AUTH_PASS = "4307";
+    // อีเมลและรหัสผ่านใหม่
+    const AUTH_EMAIL = "aebenenarak@gmail.com";
+    const AUTH_PASS = "shulisoft0plus";
 
     // Firebase Config ของ benefitie
     const firebaseConfig = {
@@ -539,7 +540,6 @@
       loadSavedProfiles();
     }
 
-    // ซิงก์รีวิวและสถิติจาก Cloud Firestore
     function listenToReviewsAdmin() {
       db.collection("benefitie_reviews")
         .orderBy("createdAt", "desc")
